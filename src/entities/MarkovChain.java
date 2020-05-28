@@ -1,20 +1,17 @@
 package entities;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
 public class MarkovChain {
-    private ArrayList<HashMap<Integer, Double>> adjacencyList;
+    private double adjacencyList[][];
 
-    public MarkovChain() {
-        adjacencyList = new ArrayList<>();
+    public MarkovChain(int numberStates) {
+        adjacencyList = new double[numberStates][numberStates];
     }
 
     public void addEdge(int stateFrom, int stateTo, double probability) {
-        while (stateFrom >= adjacencyList.size()) {
-            adjacencyList.add(new HashMap<>());
-        }
-        HashMap<Integer, Double> hashMap = adjacencyList.get(stateFrom);
-        hashMap.put(stateTo, probability);
+        adjacencyList[stateFrom][stateTo] = probability;
+    }
+
+    public double[][] getAdjacencyList() {
+        return adjacencyList;
     }
 }

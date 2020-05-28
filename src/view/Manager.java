@@ -12,8 +12,8 @@ import javafx.scene.text.TextAlignment;
 import utilities.I18N;
 
 public class Manager {
-    public static void addLabelToGridPane(GridPane table, Font font, Boolean bind, String text,
-                                          HPos hPos, int columnIndex, int rowIndex, int columnSpan) {
+    public static Label addLabelToGridPane(GridPane table, Font font, Boolean bind, String text,
+                                           HPos hPos, boolean visibility, int columnIndex, int rowIndex, int columnSpan) {
         Label label = new Label();
         label.setFont(font);
         if (bind) {
@@ -27,10 +27,12 @@ public class Manager {
         GridPane.setValignment(label, VPos.CENTER);
         GridPane.setMargin(label, new Insets(12, 25, 12, 25));
         GridPane.setColumnSpan(label, columnSpan);
+        label.setVisible(visibility);
         table.add(label, columnIndex, rowIndex);
+        return label;
     }
 
-    public static void addTextFieldToGridPane(GridPane table, HPos hPos, int columnIndex, int rowIndex) {
+    public static TextField addTextFieldToGridPane(GridPane table, HPos hPos, int columnIndex, int rowIndex) {
         TextField textField = new TextField();
         textField.textProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue.matches("\\d*")) {
@@ -41,6 +43,7 @@ public class Manager {
         GridPane.setValignment(textField, VPos.CENTER);
         GridPane.setMargin(textField, new Insets(12, 25, 12, 25));
         table.add(textField, columnIndex, rowIndex);
+        return textField;
     }
 
     public static Button addButtonToGridPane(GridPane table, Font font, String text, HPos hPos, int columnIndex, int rowIndex, int columnSpan) {

@@ -40,7 +40,6 @@ public class Controller {
 
     private Stage stage;
     private File file;
-    private MarkovChain markovChain;
     private Commands commands = new Commands();
 
     public void bind() {
@@ -65,8 +64,9 @@ public class Controller {
         file = fileChooser.showOpenDialog(stage);
         if (file != null) {
             try {
-                markovChain = ReaderFromFile.getMarkovChain(file);
+                MarkovChain markovChain = ReaderFromFile.getMarkovChain(file);
                 fileName.setText(I18N.get("uploadedFile") + "\n" + file.getName());
+                commands.setMarkovChain(markovChain);
             } catch (FileNotFoundException e) {
                 showError(new AppException(I18N.get("FILE_NOT_LOADED"), e));
                 e.printStackTrace();
@@ -82,19 +82,19 @@ public class Controller {
         int rowIndex = 0;
 
         Manager.addLabelToGridPane(mainMenuContent, new Font("System Bold", 35), true,
-                "button.mainMenu", HPos.CENTER, 0, rowIndex++, 1);
+                "button.mainMenu", HPos.CENTER, true,0, rowIndex++, 1);
 
         Set<Map.Entry<String, String>> setCommands = commands.getCommandsInfo();
         for (Map.Entry<String, String> e : setCommands) {
             if ("A1".equals(e.getKey())) {
                 Manager.addLabelToGridPane(mainMenuContent, new Font("System Bold", 22), true,
-                        "category.A", HPos.LEFT, 0, rowIndex++, 1);
+                        "category.A", HPos.LEFT, true,0, rowIndex++, 1);
             }
 
             Button button = Manager.addButtonToGridPane(mainMenuContent, new Font(16), e.getValue(), HPos.LEFT, 0, rowIndex++, 1);
             button.setOnAction(event -> {
                 deletePreviousTable(mainMenuContent);
-                commands.executeCommand(e.getKey(), markovChain, mainMenuContent);
+                commands.executeCommand(e.getKey(), mainMenuContent);
             });
         }
     }

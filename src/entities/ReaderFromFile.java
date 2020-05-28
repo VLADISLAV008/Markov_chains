@@ -10,18 +10,19 @@ import java.util.regex.Pattern;
 public final class ReaderFromFile {
 
     public static MarkovChain getMarkovChain(File file) throws FileNotFoundException {
-        MarkovChain markovChain = new MarkovChain();
+        ArrayList<String> inputData = new ArrayList<>();
         Scanner s = new Scanner(file);
-
-        int stateFrom = 0;
         while (s.hasNextLine()) {
-            ArrayList<Edge> list = parsingData(s.nextLine(), stateFrom);
+            inputData.add(s.nextLine());
+        }
+
+        MarkovChain markovChain = new MarkovChain(inputData.size());
+        for (int i = 0; i < inputData.size(); i++) {
+            ArrayList<Edge> list = parsingData(inputData.get(i), i);
             for (Edge e : list) {
                 markovChain.addEdge(e.stateFrom, e.stateTo, e.probability);
             }
-            stateFrom++;
         }
-
         return markovChain;
     }
 
