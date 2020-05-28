@@ -1,21 +1,26 @@
 package view;
 
+import calculation.Commands;
+import entities.MarkovChain;
+import entities.ReaderFromFile;
 import exceptions.AppException;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.geometry.HPos;
 import javafx.scene.control.*;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Region;
+import javafx.scene.text.Font;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import utilities.I18N;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
 import java.util.Locale;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.Map;
+import java.util.Set;
 
 public class Controller {
     @FXML
@@ -30,12 +35,17 @@ public class Controller {
     public MenuItem about;
     public RadioMenuItem russian;
     public RadioMenuItem english;
+    public Button mainMenu;
+    public GridPane mainMenuContent;
 
     private Stage stage;
-    File file;
+    private File file;
+    private MarkovChain markovChain;
+    private Commands commands = new Commands();
 
     public void bind() {
         buttonLoad.textProperty().bind(I18N.createStringBinding("button.load"));
+        mainMenu.textProperty().bind(I18N.createStringBinding("button.mainMenu"));
         menuFile.textProperty().bind(I18N.createStringBinding("menu.file"));
         menuLanguage.textProperty().bind(I18N.createStringBinding("menu.language"));
         menuHelp.textProperty().bind(I18N.createStringBinding("menu.help"));
@@ -43,7 +53,6 @@ public class Controller {
         menuLoadFile.textProperty().bind(I18N.createStringBinding("button.load"));
         help.textProperty().bind(I18N.createStringBinding("menu.help"));
         about.textProperty().bind(I18N.createStringBinding("about"));
-
         russian.textProperty().bind(I18N.createStringBinding("russian"));
         english.textProperty().bind(I18N.createStringBinding("english"));
     }
@@ -56,12 +65,45 @@ public class Controller {
         file = fileChooser.showOpenDialog(stage);
         if (file != null) {
             try {
+                markovChain = ReaderFromFile.getMarkovChain(file);
                 fileName.setText(I18N.get("uploadedFile") + "\n" + file.getName());
+            } catch (FileNotFoundException e) {
+                showError(new AppException(I18N.get("FILE_NOT_LOADED"), e));
+                e.printStackTrace();
             } catch (Exception e) {
                 showError(new AppException(I18N.get("INVALID_FORMAT") + I18N.get("INPUT_FILE_FORMAT"), e));
                 e.printStackTrace();
             }
         }
+    }
+
+    public void createMainMenu(ActionEvent actionEvent) {
+        deletePreviousTable(mainMenuContent);
+        int rowIndex = 0;
+
+        Manager.addLabelToGridPane(mainMenuContent, new Font("System Bold", 35), true,
+                "button.mainMenu", HPos.CENTER, 0, rowIndex++, 1);
+
+        Set<Map.Entry<String, String>> setCommands = commands.getCommandsInfo();
+        for (Map.Entry<String, String> e : setCommands) {
+            if ("A1".equals(e.getKey())) {
+                Manager.addLabelToGridPane(mainMenuContent, new Font("System Bold", 22), true,
+                        "category.A", HPos.LEFT, 0, rowIndex++, 1);
+            }
+
+            Button button = Manager.addButtonToGridPane(mainMenuContent, new Font(16), e.getValue(), HPos.LEFT, 0, rowIndex++, 1);
+            button.setOnAction(event -> {
+                deletePreviousTable(mainMenuContent);
+                commands.executeCommand(e.getKey(), markovChain, mainMenuContent);
+            });
+        }
+    }
+
+    private void deletePreviousTable(GridPane table) {
+        table.getColumnConstraints().clear();
+        table.getRowConstraints().clear();
+        table.getChildren().clear();
+        table.setGridLinesVisible(false);
     }
 
     public void setStage(Stage stage) {
@@ -108,15 +150,15 @@ public class Controller {
 
     public void translateToRussian(ActionEvent actionEvent) {
         I18N.setLocale(new Locale("ru", ""));
-        if (file == null) {
-            fileName.setText(I18N.get("label.fileName"));
-        } else {
-            fileName.setText(I18N.get("uploadedFile") + "\n" + file.getName());
-        }
+        translate(actionEvent);
     }
 
     public void translateToEnglish(ActionEvent actionEvent) {
         I18N.setLocale(Locale.ENGLISH);
+        translate(actionEvent);
+    }
+
+    private void translate(ActionEvent actionEvent) {
         if (file == null) {
             fileName.setText(I18N.get("label.fileName"));
         } else {

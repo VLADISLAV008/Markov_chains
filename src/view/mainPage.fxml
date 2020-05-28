@@ -36,15 +36,15 @@
         <GridPane>
             <FlowPane orientation="VERTICAL" style="-fx-background-color: #8c8c8c" GridPane.columnIndex="0"
                       GridPane.rowIndex="0" prefHeight="1300">
-                <GridPane hgap="20" prefHeight="268.0" prefWidth="234.0" vgap="50" alignment="CENTER">
+                <GridPane hgap="30" vgap="50" alignment="CENTER">
                     <padding>
-                        <Insets left="2" top="10"/>
+                        <Insets left="2" top="40" right="10"/>
                     </padding>
                     <Label fx:id="fileName" text="%label.fileName" lineSpacing="2.0" textAlignment="CENTER"
                            textFill="#e50808" GridPane.columnIndex="1" GridPane.rowIndex="1">
                         <GridPane.halignment>center</GridPane.halignment>
                         <font>
-                            <Font name="System Italic" size="16.0"/>
+                            <Font name="System Italic" size="18.0"/>
                         </font>
                     </Label>
                     <Button onAction="#deleteFile" prefHeight="22.0" prefWidth="22.0" GridPane.columnIndex="2"
@@ -56,35 +56,42 @@
                         </graphic>
                     </Button>
                     <Button fx:id="buttonLoad" text="%button.load" onAction="#loadFile" GridPane.columnIndex="1"
-                            GridPane.columnSpan="2"
-                            GridPane.rowIndex="2">
+                            GridPane.columnSpan="2" GridPane.rowIndex="2">
                         <GridPane.halignment>center</GridPane.halignment>
                         <font>
-                            <Font size="16.0"/>
+                            <Font size="18.0"/>
                         </font>
                     </Button>
 
-                    <padding>
-                        <Insets right="10"/>
-                    </padding>
+                    <Button fx:id="mainMenu" text="%button.mainMenu" onAction="#createMainMenu" GridPane.columnIndex="1"
+                            GridPane.columnSpan="2" GridPane.rowIndex="3">
+                        <GridPane.halignment>center</GridPane.halignment>
+                        <font>
+                            <Font size="18.0"/>
+                        </font>
+                    </Button>
 
                     <columnConstraints>
                         <ColumnConstraints/>
-                        <ColumnConstraints prefWidth="150.0"/>
+                        <ColumnConstraints/>
                         <ColumnConstraints/>
                     </columnConstraints>
                     <rowConstraints>
                         <RowConstraints/>
-                        <RowConstraints minHeight="-Infinity"/>
+                        <RowConstraints/>
                         <RowConstraints/>
                         <RowConstraints/>
                     </rowConstraints>
                 </GridPane>
             </FlowPane>
 
-            <FlowPane orientation="VERTICAL" prefHeight="833.0" prefWidth="576.0" GridPane.columnIndex="1"
-                      GridPane.rowIndex="0">
-            </FlowPane>
+            <GridPane fx:id="mainMenuContent" hgap="30" vgap="15" GridPane.columnIndex="1"
+                      GridPane.rowIndex="0" prefWidth="1400">
+                <padding>
+                    <Insets left="20" top="40"/>
+                </padding>
+            </GridPane>
+
             <columnConstraints>
                 <ColumnConstraints/>
                 <ColumnConstraints/>

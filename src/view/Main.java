@@ -22,9 +22,11 @@ public class Main extends Application {
         Parent root = fxmlLoader.load();
 
         ((Controller) fxmlLoader.getController()).bind();
+        ((Controller) fxmlLoader.getController()).mainMenu.fire();
         ((Controller) fxmlLoader.getController()).setStage(primaryStage);
 
         primaryStage.setScene(new Scene(root, 1300, 700));
+        primaryStage.setMaximized(true);
         primaryStage.show();
     }
 
