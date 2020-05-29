@@ -1,9 +1,11 @@
 package entities;
 
 public class MarkovChain {
-    private double adjacencyList[][];
+    private double[][] adjacencyList;
+    private int numberStates;
 
     public MarkovChain(int numberStates) {
+        this.numberStates = numberStates;
         adjacencyList = new double[numberStates][numberStates];
     }
 
@@ -13,5 +15,9 @@ public class MarkovChain {
 
     public double[][] getAdjacencyList() {
         return adjacencyList;
+    }
+
+    public int getNumberStates() {
+        return numberStates;
     }
 }

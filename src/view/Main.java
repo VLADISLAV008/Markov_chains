@@ -21,7 +21,7 @@ public class Main extends Application {
         fxmlLoader.setResources(bundle);
         Parent root = fxmlLoader.load();
 
-        ((Controller) fxmlLoader.getController()).bind();
+        ((Controller) fxmlLoader.getController()).initialize();
         ((Controller) fxmlLoader.getController()).mainMenu.fire();
         ((Controller) fxmlLoader.getController()).setStage(primaryStage);
 

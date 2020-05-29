@@ -1,6 +1,6 @@
 package view;
 
-import calculation.Commands;
+import calculation.commands.Commands;
 import entities.MarkovChain;
 import entities.ReaderFromFile;
 import exceptions.AppException;
@@ -18,6 +18,7 @@ import utilities.I18N;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
@@ -40,9 +41,10 @@ public class Controller {
 
     private Stage stage;
     private File file;
-    private Commands commands = new Commands();
+    private Commands commands;
+    private MarkovChain markovChain;
 
-    public void bind() {
+    private void bind() {
         buttonLoad.textProperty().bind(I18N.createStringBinding("button.load"));
         mainMenu.textProperty().bind(I18N.createStringBinding("button.mainMenu"));
         menuFile.textProperty().bind(I18N.createStringBinding("menu.file"));
@@ -56,6 +58,11 @@ public class Controller {
         english.textProperty().bind(I18N.createStringBinding("english"));
     }
 
+    public void initialize() {
+        commands = new Commands(mainMenuContent);
+        bind();
+    }
+
     @FXML
     public void loadFile(ActionEvent actionEvent) {
         final FileChooser fileChooser = new FileChooser();
@@ -64,14 +71,13 @@ public class Controller {
         file = fileChooser.showOpenDialog(stage);
         if (file != null) {
             try {
-                MarkovChain markovChain = ReaderFromFile.getMarkovChain(file);
+                markovChain = ReaderFromFile.getMarkovChain(file);
                 fileName.setText(I18N.get("uploadedFile") + "\n" + file.getName());
-                commands.setMarkovChain(markovChain);
             } catch (FileNotFoundException e) {
-                showError(new AppException(I18N.get("FILE_NOT_LOADED"), e));
+                showError(I18N.get("FILE_NOT_LOADED"));
                 e.printStackTrace();
             } catch (Exception e) {
-                showError(new AppException(I18N.get("INVALID_FORMAT") + I18N.get("INPUT_FILE_FORMAT"), e));
+                showError(I18N.get("INVALID_FORMAT") + I18N.get("INPUT_FILE_FORMAT"));
                 e.printStackTrace();
             }
         }
@@ -82,19 +88,26 @@ public class Controller {
         int rowIndex = 0;
 
         Manager.addLabelToGridPane(mainMenuContent, new Font("System Bold", 35), true,
-                "button.mainMenu", HPos.CENTER, true,0, rowIndex++, 1);
+                "button.mainMenu", HPos.CENTER, true, 0, rowIndex++, 1);
 
-        Set<Map.Entry<String, String>> setCommands = commands.getCommandsInfo();
+        ArrayList<Map.Entry<String, String>> setCommands = commands.getCommandsInfo();
         for (Map.Entry<String, String> e : setCommands) {
             if ("A1".equals(e.getKey())) {
                 Manager.addLabelToGridPane(mainMenuContent, new Font("System Bold", 22), true,
-                        "category.A", HPos.LEFT, true,0, rowIndex++, 1);
+                        "category.A", HPos.LEFT, true, 0, rowIndex++, 1);
             }
 
             Button button = Manager.addButtonToGridPane(mainMenuContent, new Font(16), e.getValue(), HPos.LEFT, 0, rowIndex++, 1);
             button.setOnAction(event -> {
-                deletePreviousTable(mainMenuContent);
-                commands.executeCommand(e.getKey(), mainMenuContent);
+                try {
+                    deletePreviousTable(mainMenuContent);
+                    commands.executeCommand(e.getKey(), markovChain);
+                } catch (AppException ex) {
+                    createMainMenu(actionEvent);
+                    showError(ex.getMessage());
+                } catch (Exception ex) {
+                    Controller.showError(I18N.get("INVALID_INPUT_DATA"));
+                }
             });
         }
     }
@@ -110,13 +123,13 @@ public class Controller {
         this.stage = stage;
     }
 
-    private void showError(AppException e) {
+    public static void showError(String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
         alert.getDialogPane().setMinWidth(600);
         alert.setTitle(I18N.get("error"));
         alert.setHeaderText(null);
-        alert.setContentText(e.getMessage());
+        alert.setContentText(message);
         alert.showAndWait();
     }
 

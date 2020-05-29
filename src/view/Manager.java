@@ -32,18 +32,34 @@ public class Manager {
         return label;
     }
 
-    public static TextField addTextFieldToGridPane(GridPane table, HPos hPos, int columnIndex, int rowIndex) {
+    public static TextField addTextFieldToGridPane(GridPane table, HPos hPos, boolean real, int columnIndex, int rowIndex) {
         TextField textField = new TextField();
-        textField.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (!newValue.matches("\\d*")) {
-                textField.setText(newValue.replaceAll("[^\\d]", ""));
-            }
-        });
+        if (real) {
+            realTextField(textField);
+        } else {
+            decimalTextField(textField);
+        }
         GridPane.setHalignment(textField, hPos);
         GridPane.setValignment(textField, VPos.CENTER);
         GridPane.setMargin(textField, new Insets(12, 25, 12, 25));
         table.add(textField, columnIndex, rowIndex);
         return textField;
+    }
+
+    private static void realTextField(TextField textField) {
+        textField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("\\d*")) {
+                textField.setText(newValue.replaceAll("[^\\d]", ""));
+            }
+        });
+    }
+
+    private static void decimalTextField(TextField textField) {
+        textField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("\\d+(\\.)?\\d*")) {
+                textField.setText(newValue.replaceAll("[^\\d(\\.)]", ""));
+            }
+        });
     }
 
     public static Button addButtonToGridPane(GridPane table, Font font, String text, HPos hPos, int columnIndex, int rowIndex, int columnSpan) {
