@@ -49,6 +49,8 @@ public final class CommandA1 extends Command {
 
         button.setOnAction(e ->
         {
+            label.setVisible(false);
+            labelResult.setVisible(false);
             try {
                 int initialState = Integer.parseInt(tFInitState.getText());
                 int finiteState = Integer.parseInt(tFFiniteState.getText());

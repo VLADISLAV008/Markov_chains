@@ -3,6 +3,7 @@ package view;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.VPos;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -23,10 +24,7 @@ public class Manager {
         }
         label.setWrapText(true);
         label.setTextAlignment(TextAlignment.CENTER);
-        GridPane.setHalignment(label, hPos);
-        GridPane.setValignment(label, VPos.CENTER);
-        GridPane.setMargin(label, new Insets(12, 25, 12, 25));
-        GridPane.setColumnSpan(label, columnSpan);
+        customization(label, hPos, columnSpan);
         label.setVisible(visibility);
         table.add(label, columnIndex, rowIndex);
         return label;
@@ -39,9 +37,7 @@ public class Manager {
         } else {
             decimalTextField(textField);
         }
-        GridPane.setHalignment(textField, hPos);
-        GridPane.setValignment(textField, VPos.CENTER);
-        GridPane.setMargin(textField, new Insets(12, 25, 12, 25));
+        customization(textField, hPos, 1);
         table.add(textField, columnIndex, rowIndex);
         return textField;
     }
@@ -67,11 +63,23 @@ public class Manager {
         button.textProperty().bind(I18N.createStringBinding(text));
         button.setFont(font);
         button.setWrapText(true);
-        GridPane.setHalignment(button, hPos);
-        GridPane.setValignment(button, VPos.CENTER);
-        GridPane.setMargin(button, new Insets(12, 25, 12, 25));
-        GridPane.setColumnSpan(button, columnSpan);
+        customization(button, hPos, columnSpan);
         table.add(button, columnIndex, rowIndex);
         return button;
+    }
+
+    public static GridPane addGridPaneToGridPane(GridPane table, HPos hPos, int columnIndex, int rowIndex, int columnSpan) {
+        GridPane gridPane = new GridPane();
+        customization(gridPane, hPos, columnSpan);
+        table.add(gridPane, columnIndex, rowIndex);
+        return gridPane;
+    }
+
+    private static void customization(Node node, HPos hPos, int columnSpan)
+    {
+        GridPane.setHalignment(node, hPos);
+        GridPane.setValignment(node, VPos.CENTER);
+        GridPane.setMargin(node, new Insets(12, 25, 12, 25));
+        GridPane.setColumnSpan(node, columnSpan);
     }
 }

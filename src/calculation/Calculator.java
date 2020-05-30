@@ -18,14 +18,26 @@ public final class Calculator {
         ArrayList<Double> result = new ArrayList<>();
         double[][] matrix = Algorithms.binaryExponentiationSquareMatrix(markovChain.getAdjacencyList(), numberSteps);
 
-        for (int i = 0; i < markovChain.getAdjacencyList().length; i++) {
+        for (int i = 0; i < markovChain.getNumberStates(); i++) {
             double probability = 0;
-            for (int j = 0; j < markovChain.getAdjacencyList().length; j++) {
+            for (int j = 0; j < markovChain.getNumberStates(); j++) {
                 probability += initialProbabilities.get(j) * matrix[j][i];
             }
             result.add(probability);
         }
 
         return result;
+    }
+
+    public static int getMathematicalExpectation(
+            MarkovChain markovChain, ArrayList<Double> initialProbabilities, int numberSteps) {
+        double result = 0;
+        ArrayList<Double> curProbabilitiesDistribution = getProbabilityDistribution(markovChain, initialProbabilities, numberSteps);
+
+        for (int i = 0; i < markovChain.getNumberStates(); i++) {
+            result += curProbabilitiesDistribution.get(i) * i;
+        }
+
+        return Double.valueOf(result).intValue();
     }
 }
