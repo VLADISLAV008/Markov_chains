@@ -37,4 +37,13 @@ public class Algorithms {
         return m;
     }
 
+    public static void dfs(double[][] adjacencyList, boolean[] used, int state) {
+        used[state] = true;
+        for (int i = 0; i < adjacencyList.length; i++) {
+            if (adjacencyList[state][i] > 0 && !used[i]) {
+                dfs(adjacencyList, used, i);
+            }
+        }
+    }
+
 }

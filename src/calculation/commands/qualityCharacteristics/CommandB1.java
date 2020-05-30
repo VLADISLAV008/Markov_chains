@@ -1,4 +1,4 @@
-package calculation.commands.numericalCharacteristics;
+package calculation.commands.qualityCharacteristics;
 
 import calculation.Calculator;
 import calculation.commands.Command;
@@ -13,8 +13,10 @@ import utilities.I18N;
 import view.Controller;
 import view.Manager;
 
-public final class CommandA1 extends Command {
-    public CommandA1(String taskName, GridPane table) {
+import java.util.ArrayList;
+
+public final class CommandB1 extends Command {
+    public CommandB1(String taskName, GridPane table) {
         super(taskName, table);
     }
 
@@ -34,34 +36,28 @@ public final class CommandA1 extends Command {
         final TextField tFFiniteState = Manager.addTextFieldToGridPane(table, HPos.LEFT, true,
                 1, rowIndex++);
 
-        Manager.addLabelToGridPane(table, new Font("", 20), true,
-                "label.number_steps", HPos.LEFT, true, 0, rowIndex, 1);
-        final TextField tFNumberSteps = Manager.addTextFieldToGridPane(table, HPos.LEFT, true,
-                1, rowIndex++);
-
-        Button button = Manager.addButtonToGridPane(table, new Font(20), "button.calculate",
+        Button button = Manager.addButtonToGridPane(table, new Font(20), "button.determine",
                 HPos.CENTER, 0, rowIndex++, 2);
 
-        Label label = Manager.addLabelToGridPane(table, new Font("", 20), true,
-                "label.transition_probability", HPos.LEFT, false, 0, rowIndex, 1);
         Label labelResult = Manager.addLabelToGridPane(table, new Font("", 20), false,
-                "", HPos.LEFT, false, 1, rowIndex, 1);
+                "", HPos.CENTER, false, 0, rowIndex, 2);
 
         button.setOnAction(e ->
         {
-            label.setVisible(false);
             labelResult.setVisible(false);
             try {
                 int initialState = Integer.parseInt(tFInitState.getText());
                 int finiteState = Integer.parseInt(tFFiniteState.getText());
-                int numberSteps = Integer.parseInt(tFNumberSteps.getText());
-                double result = 1;
-                if (numberSteps > 0) {
-                    result = Calculator.getTransitionProbability(markovChain, initialState, finiteState, numberSteps);
-                }
-                label.setVisible(true);
+                ArrayList<Integer> list = Calculator.getListOfReachableStates(markovChain, initialState);
+                boolean result = list.contains(finiteState);
                 labelResult.setVisible(true);
-                labelResult.setText(Double.toString(result));
+                String text;
+                if (result) {
+                    text = "label.reachable";
+                } else {
+                    text = "label.notReachable";
+                }
+                labelResult.textProperty().bind(I18N.createStringBinding(text));
             } catch (Exception ex) {
                 Controller.showError(I18N.get("INVALID_INPUT_DATA"));
             }

@@ -40,4 +40,16 @@ public final class Calculator {
 
         return Double.valueOf(result).intValue();
     }
+
+    public static ArrayList<Integer> getListOfReachableStates(MarkovChain markovChain, int state) {
+        ArrayList<Integer> result = new ArrayList<>();
+        boolean[] used = new boolean[markovChain.getNumberStates()];
+        Algorithms.dfs(markovChain.getAdjacencyList(), used, state);
+        for (int i = 0; i < used.length; i++) {
+            if (used[i]) {
+                result.add(i);
+            }
+        }
+        return result;
+    }
 }

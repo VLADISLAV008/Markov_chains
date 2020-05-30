@@ -96,6 +96,10 @@ public class Controller {
                 Manager.addLabelToGridPane(mainMenuContent, new Font("System Bold", 22), true,
                         "category.A", HPos.LEFT, true, 0, rowIndex++, 1);
             }
+            if ("B1".equals(e.getKey())) {
+                Manager.addLabelToGridPane(mainMenuContent, new Font("System Bold", 22), true,
+                        "category.B", HPos.LEFT, true, 0, rowIndex++, 1);
+            }
 
             Button button = Manager.addButtonToGridPane(mainMenuContent, new Font(16), e.getValue(), HPos.LEFT, 0, rowIndex++, 1);
             button.setOnAction(event -> {
@@ -159,6 +163,7 @@ public class Controller {
     public void deleteFile(ActionEvent actionEvent) {
         fileName.setText(I18N.get("label.fileName"));
         file = null;
+        markovChain = null;
     }
 
     public void translateToRussian(ActionEvent actionEvent) {
