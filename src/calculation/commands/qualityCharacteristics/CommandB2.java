@@ -15,8 +15,8 @@ import view.Manager;
 
 import java.util.ArrayList;
 
-public final class CommandB1 extends Command {
-    public CommandB1(String taskName, GridPane table) {
+public final class CommandB2 extends Command {
+    public CommandB2(String taskName, GridPane table) {
         super(taskName, table);
     }
 
@@ -31,31 +31,28 @@ public final class CommandB1 extends Command {
         final TextField tFInitState = Manager.addTextFieldToGridPane(table, HPos.LEFT, true,
                 1, rowIndex++);
 
-        Manager.addLabelToGridPane(table, new Font("", 20), true,
-                "label.finite_state", HPos.LEFT, true, 0, rowIndex, 1);
-        final TextField tFFiniteState = Manager.addTextFieldToGridPane(table, HPos.LEFT, true,
-                1, rowIndex++);
-
         Button button = Manager.addButtonToGridPane(table, new Font(20), "button.determine",
                 HPos.CENTER, 0, rowIndex++, 2);
 
+        Label label = Manager.addLabelToGridPane(table, new Font("", 20), true,
+                "label.reachable_states", HPos.CENTER, false, 0, rowIndex, 1);
         Label labelResult = Manager.addLabelToGridPane(table, new Font("", 20), false,
-                "", HPos.CENTER, false, 0, rowIndex, 2);
-
+                "", HPos.CENTER, false, 1, rowIndex++, 1);
         button.setOnAction(e ->
         {
+            label.setVisible(false);
             labelResult.setVisible(false);
             try {
                 int initialState = Integer.parseInt(tFInitState.getText());
-                int finiteState = Integer.parseInt(tFFiniteState.getText());
                 ArrayList<Integer> list = Calculator.getListOfReachableStates(markovChain, initialState);
-                boolean result = list.contains(finiteState);
-                labelResult.setVisible(true);
-                if (result) {
-                    labelResult.textProperty().bind(I18N.createStringBinding("label.reachable"));
-                } else {
-                    labelResult.textProperty().bind(I18N.createStringBinding("label.notReachable"));
+                StringBuilder result = new StringBuilder();
+                for (Integer n : list) {
+                    result.append(n).append(", ");
                 }
+                result.delete(result.length() - 2, result.length());
+                labelResult.setText(result.toString());
+                label.setVisible(true);
+                labelResult.setVisible(true);
             } catch (Exception ex) {
                 Controller.showError(I18N.get("INVALID_INPUT_DATA"));
             }

@@ -90,8 +90,9 @@ public class Controller {
         Manager.addLabelToGridPane(mainMenuContent, new Font("System Bold", 35), true,
                 "button.mainMenu", HPos.CENTER, true, 0, rowIndex++, 1);
 
-        ArrayList<Map.Entry<String, String>> setCommands = commands.getCommandsInfo();
-        for (Map.Entry<String, String> e : setCommands) {
+        ArrayList<Map.Entry<String, String>> commandsList = commands.getCommandsInfo();
+        System.out.println(commandsList.size());
+        for (Map.Entry<String, String> e : commandsList) {
             if ("A1".equals(e.getKey())) {
                 Manager.addLabelToGridPane(mainMenuContent, new Font("System Bold", 22), true,
                         "category.A", HPos.LEFT, true, 0, rowIndex++, 1);
