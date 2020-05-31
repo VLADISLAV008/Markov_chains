@@ -86,7 +86,7 @@
             </FlowPane>
 
             <GridPane fx:id="mainMenuContent" hgap="30" vgap="15" GridPane.columnIndex="1"
-                      GridPane.rowIndex="0" prefWidth="1400">
+                      GridPane.rowIndex="0" prefWidth="1500">
                 <padding>
                     <Insets left="20" top="40"/>
                 </padding>

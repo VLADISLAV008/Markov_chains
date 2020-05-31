@@ -22,6 +22,7 @@ public class Commands {
         commands.put("B3", new CommandB3("command.B3", table));
         commands.put("B4", new CommandB4("command.B4", table));
         commands.put("B5", new CommandB5("command.B5", table));
+        commands.put("B6", new CommandB6("command.B6", table));
     }
 
     public ArrayList<Map.Entry<String, String>> getCommandsInfo() {

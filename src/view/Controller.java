@@ -87,21 +87,33 @@ public class Controller {
         deletePreviousTable(mainMenuContent);
         int rowIndex = 0;
 
+
+
+        GridPane table = new GridPane();
+        table.setHgap(30);
+        table.setVgap(15);
+        table.setPrefWidth(1450);
+        ScrollPane scrollPane = new ScrollPane(table);
+        mainMenuContent.add(scrollPane, 0, 0);
+
+        Manager.addLabelToGridPane(table, new Font("System Bold", 35), true,
+                "button.mainMenu", HPos.CENTER, true, 0, rowIndex++, 1);
+
         Manager.addLabelToGridPane(mainMenuContent, new Font("System Bold", 35), true,
                 "button.mainMenu", HPos.CENTER, true, 0, rowIndex++, 1);
 
         ArrayList<Map.Entry<String, String>> commandsList = commands.getCommandsInfo();
         for (Map.Entry<String, String> e : commandsList) {
             if ("A1".equals(e.getKey())) {
-                Manager.addLabelToGridPane(mainMenuContent, new Font("System Bold", 22), true,
+                Manager.addLabelToGridPane(table, new Font("System Bold", 22), true,
                         "category.A", HPos.LEFT, true, 0, rowIndex++, 1);
             }
             if ("B1".equals(e.getKey())) {
-                Manager.addLabelToGridPane(mainMenuContent, new Font("System Bold", 22), true,
+                Manager.addLabelToGridPane(table, new Font("System Bold", 22), true,
                         "category.B", HPos.LEFT, true, 0, rowIndex++, 1);
             }
 
-            Button button = Manager.addButtonToGridPane(mainMenuContent, new Font(18), e.getValue(), HPos.LEFT, 0, rowIndex++, 1);
+            Button button = Manager.addButtonToGridPane(table, new Font(18), e.getValue(), HPos.LEFT, 0, rowIndex++, 1);
             button.setOnAction(event -> {
                 try {
                     deletePreviousTable(mainMenuContent);

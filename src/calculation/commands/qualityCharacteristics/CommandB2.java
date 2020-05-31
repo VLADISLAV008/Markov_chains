@@ -37,7 +37,7 @@ public final class CommandB2 extends Command {
         Label label = Manager.addLabelToGridPane(table, new Font("", 20), true,
                 "label.reachable_states", HPos.CENTER, false, 0, rowIndex, 1);
         Label labelResult = Manager.addLabelToGridPane(table, new Font("", 20), false,
-                "", HPos.CENTER, false, 1, rowIndex++, 1);
+                "", HPos.CENTER, false, 1, rowIndex++, 2);
         button.setOnAction(e ->
         {
             label.setVisible(false);
