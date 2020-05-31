@@ -60,4 +60,15 @@ public final class Calculator {
         return getListOfReachableStates(markovChain, state1).contains(state2) &&
                 getListOfReachableStates(markovChain, state2).contains(state1);
     }
+
+    public static ArrayList<ArrayList<Integer>> getEquivalenceClassesCommunicatingStates(MarkovChain markovChain) {
+        ArrayList<ArrayList<Integer>> classes =
+                Algorithms.getStrongConnectedComponents(markovChain.getAdjacencyList());
+
+        for (ArrayList<Integer> component : classes) {
+            component.sort(Integer::compareTo);
+        }
+
+        return classes;
+    }
 }

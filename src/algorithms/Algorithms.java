@@ -66,6 +66,25 @@ public class Algorithms {
                 getListOfReachableVertices(transposedGraph, 0).size() == adjacencyList.length;
     }
 
+    public static ArrayList<ArrayList<Integer>> getStrongConnectedComponents(double[][] adjacencyList) {
+        ArrayList<ArrayList<Integer>> components = new ArrayList<>();
+
+        double[][] transposedGraph = buildTransposedGraph(adjacencyList);
+        ArrayList<Integer> order = topologicalSorting(adjacencyList);
+
+        boolean[] used = new boolean[adjacencyList.length];
+
+        for (int i = adjacencyList.length - 1; i >= 0; i--) {
+            int s = order.get(i);
+            if (!used[s]) {
+                ArrayList<Integer> component = new ArrayList<>();
+                dfs(transposedGraph, used, component, s);
+                components.add(component);
+            }
+        }
+        return components;
+    }
+
     private static double[][] buildTransposedGraph(double[][] adjacencyList) {
         double[][] transposedGraph = new double[adjacencyList.length][adjacencyList.length];
         for (int i = 0; i < adjacencyList.length; i++) {
@@ -81,20 +100,19 @@ public class Algorithms {
         boolean[] used = new boolean[adjacencyList.length];
         for (int i = 0; i < adjacencyList.length; i++) {
             if (!used[i]) {
-                dfsForTopologicalSorting(adjacencyList, used, order, i);
+                dfs(adjacencyList, used, order, i);
             }
         }
         return order;
     }
 
-    private static void dfsForTopologicalSorting(double[][] adjacencyList, boolean[] used,
-                                                 ArrayList<Integer> order, int state) {
+    private static void dfs(double[][] adjacencyList, boolean[] used, ArrayList<Integer> list, int state) {
         used[state] = true;
         for (int i = 0; i < adjacencyList.length; i++) {
             if (adjacencyList[state][i] > 0 && !used[i]) {
-                dfs(adjacencyList, used, i);
+                dfs(adjacencyList, used, list, i);
             }
         }
-        order.add(state);
+        list.add(state);
     }
 }
