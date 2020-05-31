@@ -91,7 +91,6 @@ public class Controller {
                 "button.mainMenu", HPos.CENTER, true, 0, rowIndex++, 1);
 
         ArrayList<Map.Entry<String, String>> commandsList = commands.getCommandsInfo();
-        System.out.println(commandsList.size());
         for (Map.Entry<String, String> e : commandsList) {
             if ("A1".equals(e.getKey())) {
                 Manager.addLabelToGridPane(mainMenuContent, new Font("System Bold", 22), true,
@@ -102,7 +101,7 @@ public class Controller {
                         "category.B", HPos.LEFT, true, 0, rowIndex++, 1);
             }
 
-            Button button = Manager.addButtonToGridPane(mainMenuContent, new Font(16), e.getValue(), HPos.LEFT, 0, rowIndex++, 1);
+            Button button = Manager.addButtonToGridPane(mainMenuContent, new Font(18), e.getValue(), HPos.LEFT, 0, rowIndex++, 1);
             button.setOnAction(event -> {
                 try {
                     deletePreviousTable(mainMenuContent);

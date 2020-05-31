@@ -55,4 +55,9 @@ public final class Calculator {
         }
         return Algorithms.isStrongConnectedComponent(adjacencyList);
     }
+
+    public static boolean isCommunicatingStates(MarkovChain markovChain, int state1, int state2) {
+        return getListOfReachableStates(markovChain, state1).contains(state2) &&
+                getListOfReachableStates(markovChain, state2).contains(state1);
+    }
 }

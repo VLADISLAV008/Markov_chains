@@ -83,7 +83,7 @@ public final class CommandA2 extends Command {
     private GridPane createGridPane(int numberStates) {
         GridPane table = new GridPane();
         Manager.addLabelToGridPane(table, new Font("", 20), true,
-                "label.state", HPos.CENTER, true, 0, 0, 1);
+                "label.states", HPos.CENTER, true, 0, 0, 1);
         Manager.addLabelToGridPane(table, new Font("", 20), true,
                 "label.initial_probability_distribution", HPos.CENTER, true, 0, 1, 1);
         for (int i = 0; i < numberStates; i++) {
@@ -103,7 +103,7 @@ public final class CommandA2 extends Command {
     private GridPane createGridPane(int numberStates, ArrayList<Double> probabilityDistribution) {
         GridPane table = new GridPane();
         Manager.addLabelToGridPane(table, new Font("", 20), true,
-                "label.state", HPos.CENTER, true, 0, 0, 1);
+                "label.states", HPos.CENTER, true, 0, 0, 1);
         Manager.addLabelToGridPane(table, new Font("", 20), true,
                 "label.initial_probability_distribution", HPos.CENTER, true, 0, 1, 1);
         for (int i = 0; i < numberStates; i++) {
