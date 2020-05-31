@@ -42,14 +42,17 @@ public final class Calculator {
     }
 
     public static ArrayList<Integer> getListOfReachableStates(MarkovChain markovChain, int state) {
-        ArrayList<Integer> result = new ArrayList<>();
-        boolean[] used = new boolean[markovChain.getNumberStates()];
-        Algorithms.dfs(markovChain.getAdjacencyList(), used, state);
-        for (int i = 0; i < used.length; i++) {
-            if (used[i]) {
-                result.add(i);
+        return Algorithms.getListOfReachableVertices(markovChain.getAdjacencyList(), state);
+    }
+
+    public static boolean isEssentialState(MarkovChain markovChain, int state) {
+        ArrayList<Integer> states = getListOfReachableStates(markovChain, state);
+        double[][] adjacencyList = new double[states.size()][states.size()];
+        for (int i = 0; i < states.size(); i++) {
+            for (int j = 0; j < states.size(); j++) {
+                adjacencyList[i][j] = markovChain.getAdjacencyList()[states.get(i)][states.get(j)];
             }
         }
-        return result;
+        return Algorithms.isStrongConnectedComponent(adjacencyList);
     }
 }

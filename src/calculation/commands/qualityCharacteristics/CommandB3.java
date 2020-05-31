@@ -13,10 +13,8 @@ import utilities.I18N;
 import view.Controller;
 import view.Manager;
 
-import java.util.ArrayList;
-
-public final class CommandB1 extends Command {
-    public CommandB1(String taskName, GridPane table) {
+public final class CommandB3 extends Command {
+    public CommandB3(String taskName, GridPane table) {
         super(taskName, table);
     }
 
@@ -31,11 +29,6 @@ public final class CommandB1 extends Command {
         final TextField tFInitState = Manager.addTextFieldToGridPane(table, HPos.LEFT, true,
                 1, rowIndex++);
 
-        Manager.addLabelToGridPane(table, new Font("", 20), true,
-                "label.finite_state", HPos.LEFT, true, 0, rowIndex, 1);
-        final TextField tFFiniteState = Manager.addTextFieldToGridPane(table, HPos.LEFT, true,
-                1, rowIndex++);
-
         Button button = Manager.addButtonToGridPane(table, new Font(20), "button.determine",
                 HPos.CENTER, 0, rowIndex++, 2);
 
@@ -47,14 +40,12 @@ public final class CommandB1 extends Command {
             labelResult.setVisible(false);
             try {
                 int initialState = Integer.parseInt(tFInitState.getText());
-                int finiteState = Integer.parseInt(tFFiniteState.getText());
-                ArrayList<Integer> list = Calculator.getListOfReachableStates(markovChain, initialState);
-                boolean result = list.contains(finiteState);
+                boolean result = Calculator.isEssentialState(markovChain,initialState);
                 labelResult.setVisible(true);
                 if (result) {
-                    labelResult.textProperty().bind(I18N.createStringBinding("label.reachable"));
+                    labelResult.textProperty().bind(I18N.createStringBinding("label.essential"));
                 } else {
-                    labelResult.textProperty().bind(I18N.createStringBinding("label.notReachable"));
+                    labelResult.textProperty().bind(I18N.createStringBinding("label.notEssential"));
                 }
             } catch (Exception ex) {
                 Controller.showError(I18N.get("INVALID_INPUT_DATA"));

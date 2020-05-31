@@ -1,5 +1,7 @@
 package algorithms;
 
+import java.util.ArrayList;
+
 public class Algorithms {
     public static double[][] binaryExponentiationSquareMatrix(double[][] matrix, int power) {
         double[][] result = copyMatrix(matrix);
@@ -37,7 +39,19 @@ public class Algorithms {
         return m;
     }
 
-    public static void dfs(double[][] adjacencyList, boolean[] used, int state) {
+    public static ArrayList<Integer> getListOfReachableVertices(double[][] adjacencyList, int state) {
+        ArrayList<Integer> result = new ArrayList<>();
+        boolean[] used = new boolean[adjacencyList.length];
+        Algorithms.dfs(adjacencyList, used, state);
+        for (int i = 0; i < used.length; i++) {
+            if (used[i]) {
+                result.add(i);
+            }
+        }
+        return result;
+    }
+
+    private static void dfs(double[][] adjacencyList, boolean[] used, int state) {
         used[state] = true;
         for (int i = 0; i < adjacencyList.length; i++) {
             if (adjacencyList[state][i] > 0 && !used[i]) {
@@ -46,4 +60,41 @@ public class Algorithms {
         }
     }
 
+    public static boolean isStrongConnectedComponent(double[][] adjacencyList) {
+        double[][] transposedGraph = buildTransposedGraph(adjacencyList);
+        return getListOfReachableVertices(adjacencyList, 0).size() == adjacencyList.length &&
+                getListOfReachableVertices(transposedGraph, 0).size() == adjacencyList.length;
+    }
+
+    private static double[][] buildTransposedGraph(double[][] adjacencyList) {
+        double[][] transposedGraph = new double[adjacencyList.length][adjacencyList.length];
+        for (int i = 0; i < adjacencyList.length; i++) {
+            for (int j = 0; j < adjacencyList.length; j++) {
+                transposedGraph[i][j] = adjacencyList[j][i];
+            }
+        }
+        return transposedGraph;
+    }
+
+    private static ArrayList<Integer> topologicalSorting(double[][] adjacencyList) {
+        ArrayList<Integer> order = new ArrayList<>();
+        boolean[] used = new boolean[adjacencyList.length];
+        for (int i = 0; i < adjacencyList.length; i++) {
+            if (!used[i]) {
+                dfsForTopologicalSorting(adjacencyList, used, order, i);
+            }
+        }
+        return order;
+    }
+
+    private static void dfsForTopologicalSorting(double[][] adjacencyList, boolean[] used,
+                                                 ArrayList<Integer> order, int state) {
+        used[state] = true;
+        for (int i = 0; i < adjacencyList.length; i++) {
+            if (adjacencyList[state][i] > 0 && !used[i]) {
+                dfs(adjacencyList, used, i);
+            }
+        }
+        order.add(state);
+    }
 }
