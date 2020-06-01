@@ -26,7 +26,7 @@ public final class CommandC1 extends Command {
                 taskName, HPos.CENTER, true, 0, rowIndex++, 3);
 
         Label labelIrreducible = Manager.addLabelToGridPane(table, new Font("", 20), false,
-                "", HPos.CENTER, true, 0, rowIndex++, 2);
+                "", HPos.LEFT, true, 0, rowIndex++, 2);
 
         Manager.addLabelToGridPane(table, new Font("", 20), true,
                 "label.count_components", HPos.LEFT, true, 0, rowIndex, 1);

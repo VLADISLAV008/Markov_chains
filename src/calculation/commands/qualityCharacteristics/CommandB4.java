@@ -4,14 +4,15 @@ import calculation.Calculator;
 import calculation.commands.Command;
 import entities.MarkovChain;
 import javafx.geometry.HPos;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Font;
 import utilities.I18N;
 import view.Controller;
 import view.Manager;
+
+import java.util.ArrayList;
 
 public final class CommandB4 extends Command {
     public CommandB4(String taskName, GridPane table) {
@@ -22,36 +23,56 @@ public final class CommandB4 extends Command {
     public void execute(MarkovChain markovChain) {
         int rowIndex = 0;
         Manager.addLabelToGridPane(table, new Font("System Bold", 20), true,
-                taskName, HPos.CENTER, true, 0, rowIndex++, 4);
+                taskName, HPos.CENTER, true, 0, rowIndex++, 3);
+
+        ScrollPane scrollPane = new ScrollPane();
+        GridPane.setColumnSpan(scrollPane, 2);
+        table.add(scrollPane, 0, rowIndex++);
 
         Manager.addLabelToGridPane(table, new Font("", 20), true,
-                "label.states", HPos.LEFT, true, 0, rowIndex, 1);
-        final TextField tFState1 = Manager.addTextFieldToGridPane(table, HPos.LEFT, true,
-                1, rowIndex);
-        final TextField tFState2 = Manager.addTextFieldToGridPane(table, HPos.LEFT, true,
-                2, rowIndex++);
+                "label.absorbing_states", HPos.CENTER, true, 0, rowIndex, 1);
+        Label labelAbsorbing = Manager.addLabelToGridPane(table, new Font("", 20), false,
+                "", HPos.CENTER, true, 1, rowIndex++, 1);
 
-        Button button = Manager.addButtonToGridPane(table, new Font(20), "button.determine",
-                HPos.CENTER, 0, rowIndex++, 2);
+        try {
+            ArrayList<ArrayList<Integer>> components =
+                    Calculator.getEquivalenceClassesCommunicatingStates(markovChain);
+            GridPane resultGridPane = createGridPane(components);
+            scrollPane.setContent(resultGridPane);
 
-        Label labelResult = Manager.addLabelToGridPane(table, new Font("", 20), false,
-                "", HPos.CENTER, false, 0, rowIndex++, 2);
-
-        button.setOnAction(e ->
-        {
-            labelResult.setVisible(false);
-            try {
-                int state1 = Integer.parseInt(tFState1.getText());
-                int state2 = Integer.parseInt(tFState2.getText());
-                labelResult.setVisible(true);
-                if (Calculator.isCommunicatingStates(markovChain, state1, state2)) {
-                    labelResult.textProperty().bind(I18N.createStringBinding("label.communicating"));
-                } else {
-                    labelResult.textProperty().bind(I18N.createStringBinding("label.notCommunicating"));
-                }
-            } catch (Exception ex) {
-                Controller.showError(I18N.get("INVALID_INPUT_DATA"));
+            ArrayList<Integer> absorbingStates = Calculator.getAbsorbingStates(markovChain);
+            StringBuilder result = new StringBuilder();
+            for (Integer n : absorbingStates) {
+                result.append(n).append(", ");
             }
-        });
+            result.delete(result.length() - 2, result.length());
+            labelAbsorbing.setText(result.toString());
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            Controller.showError(I18N.get("INVALID_INPUT_DATA"));
+        }
+    }
+
+    /**
+     * Create a GridPane to display all equivalence classes of communicating states.
+     */
+    private GridPane createGridPane(ArrayList<ArrayList<Integer>> components) {
+        GridPane table = new GridPane();
+        Manager.addLabelToGridPane(table, new Font("", 20), true,
+                "label.equivalence_classes", HPos.CENTER, true, 0, 0, 1);
+        Manager.addLabelToGridPane(table, new Font("", 20), true,
+                "label.states", HPos.CENTER, true, 0, 1, 1);
+        for (int i = 0; i < components.size(); i++) {
+            Manager.addLabelToGridPane(table, new Font("", 20), false,
+                    Integer.toString(i + 1), HPos.CENTER, true, i + 1, 0, 1);
+            StringBuilder sb = new StringBuilder();
+            for (Integer state : components.get(i)) {
+                sb.append(state).append(", ");
+            }
+            sb.delete(sb.length() - 2, sb.length());
+            Manager.addLabelToGridPane(table, new Font("", 20), false,
+                    sb.toString(), HPos.CENTER, true, i + 1, 1, 1);
+        }
+        return table;
     }
 }

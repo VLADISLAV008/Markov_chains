@@ -22,12 +22,14 @@ public final class CommandB3 extends Command {
     public void execute(MarkovChain markovChain) {
         int rowIndex = 0;
         Manager.addLabelToGridPane(table, new Font("System Bold", 20), true,
-                taskName, HPos.CENTER, true, 0, rowIndex++, 3);
+                taskName, HPos.CENTER, true, 0, rowIndex++, 4);
 
         Manager.addLabelToGridPane(table, new Font("", 20), true,
-                "label.initial_state", HPos.LEFT, true, 0, rowIndex, 1);
-        final TextField tFInitState = Manager.addTextFieldToGridPane(table, HPos.LEFT, true,
-                1, rowIndex++);
+                "label.states", HPos.LEFT, true, 0, rowIndex, 1);
+        final TextField tFState1 = Manager.addTextFieldToGridPane(table, HPos.LEFT, true,
+                1, rowIndex);
+        final TextField tFState2 = Manager.addTextFieldToGridPane(table, HPos.LEFT, true,
+                2, rowIndex++);
 
         Button button = Manager.addButtonToGridPane(table, new Font(20), "button.determine",
                 HPos.CENTER, 0, rowIndex++, 2);
@@ -39,13 +41,13 @@ public final class CommandB3 extends Command {
         {
             labelResult.setVisible(false);
             try {
-                int initialState = Integer.parseInt(tFInitState.getText());
-                boolean result = Calculator.isEssentialState(markovChain,initialState);
+                int state1 = Integer.parseInt(tFState1.getText());
+                int state2 = Integer.parseInt(tFState2.getText());
                 labelResult.setVisible(true);
-                if (result) {
-                    labelResult.textProperty().bind(I18N.createStringBinding("label.essential"));
+                if (Calculator.isCommunicatingStates(markovChain, state1, state2)) {
+                    labelResult.textProperty().bind(I18N.createStringBinding("label.communicating"));
                 } else {
-                    labelResult.textProperty().bind(I18N.createStringBinding("label.notEssential"));
+                    labelResult.textProperty().bind(I18N.createStringBinding("label.notCommunicating"));
                 }
             } catch (Exception ex) {
                 Controller.showError(I18N.get("INVALID_INPUT_DATA"));
