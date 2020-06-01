@@ -53,7 +53,11 @@ public final class CommandB2 extends Command {
                 for (Integer n : list) {
                     result.append(n).append(", ");
                 }
-                result.delete(result.length() - 2, result.length());
+                if (result.length() > 2) {
+                    result.delete(result.length() - 2, result.length());
+                } else {
+                    result.append("-");
+                }
                 labelResult.setText(result.toString());
                 label.setVisible(true);
                 labelResult.setVisible(true);

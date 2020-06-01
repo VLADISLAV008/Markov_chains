@@ -69,7 +69,11 @@ public final class CommandB4 extends Command {
             for (Integer state : components.get(i)) {
                 sb.append(state).append(", ");
             }
-            sb.delete(sb.length() - 2, sb.length());
+            if (sb.length() > 2) {
+                sb.delete(sb.length() - 2, sb.length());
+            } else {
+                sb.append("-");
+            }
             Manager.addLabelToGridPane(table, new Font("", 20), false,
                     sb.toString(), HPos.CENTER, true, i + 1, 1, 1);
         }

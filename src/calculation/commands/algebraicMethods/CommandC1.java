@@ -33,6 +33,21 @@ public final class CommandC1 extends Command {
         Label labelCountClasses = Manager.addLabelToGridPane(table, new Font("", 20), false,
                 "", HPos.LEFT, true, 1, rowIndex++, 1);
 
+        Manager.addLabelToGridPane(table, new Font("", 20), true,
+                "label.essential_states", HPos.LEFT, true, 0, rowIndex, 1);
+        Label labelEssentialStates = Manager.addLabelToGridPane(table, new Font("", 20), false,
+                "", HPos.LEFT, true, 1, rowIndex++, 1);
+
+        Manager.addLabelToGridPane(table, new Font("", 20), true,
+                "label.not_essential_states", HPos.LEFT, true, 0, rowIndex, 1);
+        Label labelNotEssentialStates = Manager.addLabelToGridPane(table, new Font("", 20), false,
+                "", HPos.LEFT, true, 1, rowIndex++, 1);
+
+        Manager.addLabelToGridPane(table, new Font("", 20), true,
+                "label.return_states", HPos.LEFT, true, 0, rowIndex, 1);
+        Label labelReturnStates = Manager.addLabelToGridPane(table, new Font("", 20), false,
+                "", HPos.LEFT, true, 1, rowIndex++, 1);
+
         try {
             if (Calculator.isIrreducibleChain(markovChain)) {
                 labelIrreducible.textProperty().bind(I18N.createStringBinding("label.irreducible"));
@@ -44,9 +59,32 @@ public final class CommandC1 extends Command {
                     Calculator.getEquivalenceClassesCommunicatingStates(markovChain);
             labelCountClasses.setText(Integer.toString(components.size()));
 
+            StringBuilder essential = new StringBuilder();
+            StringBuilder notEssential = new StringBuilder();
+            for (int i = 0; i < markovChain.getNumberStates(); i++) {
+                if (Calculator.isEssentialState(markovChain, i)) {
+                    essential.append(i).append(", ");
+                } else {
+                    notEssential.append(i).append(", ");
+                }
+            }
+            deleteTwoLastCharacters(essential);
+            deleteTwoLastCharacters(notEssential);
+
+            labelEssentialStates.setText(essential.toString());
+            labelNotEssentialStates.setText(notEssential.toString());
+            labelReturnStates.setText(essential.toString());
         } catch (Exception ex) {
             ex.printStackTrace();
             Controller.showError(I18N.get("INVALID_INPUT_DATA"));
+        }
+    }
+
+    private static void deleteTwoLastCharacters(StringBuilder sb) {
+        if (sb.length() > 2) {
+            sb.delete(sb.length() - 2, sb.length());
+        } else {
+            sb.append("-");
         }
     }
 }
