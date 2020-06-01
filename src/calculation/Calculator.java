@@ -75,11 +75,14 @@ public final class Calculator {
     public static ArrayList<Integer> getAbsorbingStates(MarkovChain markovChain) {
         ArrayList<Integer> absorbingStates = new ArrayList<>();
         for (int i = 0; i < markovChain.getNumberStates(); i++) {
-                if(markovChain.getAdjacencyList()[i][i] == 1)
-                {
-                    absorbingStates.add(i);
-                }
+            if (markovChain.getAdjacencyList()[i][i] == 1) {
+                absorbingStates.add(i);
+            }
         }
         return absorbingStates;
+    }
+
+    public static boolean isIrreducibleChain(MarkovChain markovChain) {
+        return Algorithms.isStrongConnectedComponent(markovChain.getAdjacencyList());
     }
 }

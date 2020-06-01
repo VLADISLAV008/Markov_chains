@@ -21,7 +21,6 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Set;
 
 public class Controller {
     @FXML
@@ -43,6 +42,8 @@ public class Controller {
     private File file;
     private Commands commands;
     private MarkovChain markovChain;
+    private ScrollPane menuScrollPane;
+    private double vValue = 0.0;
 
     private void bind() {
         buttonLoad.textProperty().bind(I18N.createStringBinding("button.load"));
@@ -87,19 +88,16 @@ public class Controller {
         deletePreviousTable(mainMenuContent);
         int rowIndex = 0;
 
-
-
         GridPane table = new GridPane();
         table.setHgap(30);
         table.setVgap(15);
         table.setPrefWidth(1450);
-        ScrollPane scrollPane = new ScrollPane(table);
-        mainMenuContent.add(scrollPane, 0, 0);
+        menuScrollPane = new ScrollPane(table);
+        menuScrollPane.setPrefHeight(900);
+        menuScrollPane.setVvalue(vValue);
+        mainMenuContent.add(menuScrollPane, 0, 0);
 
         Manager.addLabelToGridPane(table, new Font("System Bold", 35), true,
-                "button.mainMenu", HPos.CENTER, true, 0, rowIndex++, 1);
-
-        Manager.addLabelToGridPane(mainMenuContent, new Font("System Bold", 35), true,
                 "button.mainMenu", HPos.CENTER, true, 0, rowIndex++, 1);
 
         ArrayList<Map.Entry<String, String>> commandsList = commands.getCommandsInfo();
@@ -111,6 +109,10 @@ public class Controller {
             if ("B1".equals(e.getKey())) {
                 Manager.addLabelToGridPane(table, new Font("System Bold", 22), true,
                         "category.B", HPos.LEFT, true, 0, rowIndex++, 1);
+            }
+            if ("C1".equals(e.getKey())) {
+                Manager.addLabelToGridPane(table, new Font("System Bold", 22), true,
+                        "category.C", HPos.LEFT, true, 0, rowIndex++, 1);
             }
 
             Button button = Manager.addButtonToGridPane(table, new Font(18), e.getValue(), HPos.LEFT, 0, rowIndex++, 1);
@@ -129,6 +131,9 @@ public class Controller {
     }
 
     private void deletePreviousTable(GridPane table) {
+        if (menuScrollPane != null) {
+            vValue = menuScrollPane.getVvalue();
+        }
         table.getColumnConstraints().clear();
         table.getRowConstraints().clear();
         table.getChildren().clear();
