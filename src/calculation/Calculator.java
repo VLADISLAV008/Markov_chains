@@ -85,4 +85,27 @@ public final class Calculator {
     public static boolean isIrreducibleChain(MarkovChain markovChain) {
         return Algorithms.isStrongConnectedComponent(markovChain.getAdjacencyList());
     }
+
+    public static ArrayList<Integer> getPeriodicStates(MarkovChain markovChain) {
+        ArrayList<Integer> periodicStates = new ArrayList<>();
+        int[] periods = Algorithms.getStatesPeriods(markovChain.getAdjacencyList());
+        for (int i = 0; i < markovChain.getNumberStates(); i++) {
+            if (periods[i] > 1) {
+                periodicStates.add(i);
+            }
+        }
+        return periodicStates;
+    }
+
+    public static boolean isPeriodicChain(MarkovChain markovChain) {
+        return getPeriodicStates(markovChain).size() == markovChain.getNumberStates();
+    }
+
+    public static int getPeriodOfChain(MarkovChain markovChain) {
+        int[] periods = Algorithms.getStatesPeriods(markovChain.getAdjacencyList());
+        if (isPeriodicChain(markovChain)) {
+            return periods[0];
+        }
+        return 1;
+    }
 }

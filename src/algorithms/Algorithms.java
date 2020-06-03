@@ -19,6 +19,35 @@ public class Algorithms {
         return result;
     }
 
+    public static int[] getStatesPeriods(double[][] adjacencyList) {
+        int[] periods = new int[adjacencyList.length];
+
+        double[][] probabilityTransition = copyMatrix(adjacencyList);
+        int steps = 1;
+        while (steps < adjacencyList.length * adjacencyList.length) {
+            for (int i = 0; i < adjacencyList.length; i++) {
+                if (periods[i] == 0 && probabilityTransition[i][i] > 0) {
+                    periods[i] = steps;
+                }
+                if (periods[i] != 0 && probabilityTransition[i][i] > 0) {
+                    periods[i] = gcd(periods[i], steps);
+                }
+            }
+            probabilityTransition = multiplySquareMatrices(probabilityTransition, adjacencyList);
+            steps++;
+        }
+
+        return periods;
+    }
+
+    private static int gcd(int a, int b) {
+        if (b == 0) {
+            return a;
+        } else {
+            return gcd(b, a % b);
+        }
+    }
+
     private static double[][] multiplySquareMatrices(double[][] matrix1, double[][] matrix2) {
         double[][] result = new double[matrix1.length][matrix1.length];
         for (int i = 0; i < matrix1.length; i++) {
