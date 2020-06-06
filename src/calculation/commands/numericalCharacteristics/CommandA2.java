@@ -66,7 +66,7 @@ public final class CommandA2 extends Command {
                 int numberSteps = Integer.parseInt(tFNumberSteps.getText());
                 ArrayList<Double> probabilityDistribution =
                         Calculator.getProbabilityDistribution(markovChain, initialProbabilities, numberSteps);
-                GridPane resultGridPane = createGridPane(markovChain.getNumberStates(), probabilityDistribution);
+                GridPane resultGridPane = Manager.createGridPane(markovChain.getNumberStates(), probabilityDistribution, "label.result_probability_distribution");
                 resultScrollPane.setVisible(true);
                 resultScrollPane.setContent(resultGridPane);
             } catch (AppException ex) {
@@ -93,25 +93,6 @@ public final class CommandA2 extends Command {
                     false, i + 1, 1);
             textFieldsInitialProbabilities.add(textField);
             textField.setPrefWidth(80);
-        }
-        return table;
-    }
-
-    /**
-     * Create a GridPane to display the resulting probability distribution.
-     */
-    private GridPane createGridPane(int numberStates, ArrayList<Double> probabilityDistribution) {
-        GridPane table = new GridPane();
-        Manager.addLabelToGridPane(table, new Font("", 20), true,
-                "label.states", HPos.CENTER, true, 0, 0, 1);
-        Manager.addLabelToGridPane(table, new Font("", 20), true,
-                "label.initial_probability_distribution", HPos.CENTER, true, 0, 1, 1);
-        for (int i = 0; i < numberStates; i++) {
-            Manager.addLabelToGridPane(table, new Font("", 20), false,
-                    Integer.toString(i), HPos.CENTER, true, i + 1, 0, 1);
-            Manager.addLabelToGridPane(table, new Font("", 20), false,
-                    Double.toString(probabilityDistribution.get(i)), HPos.CENTER,
-                    true, i + 1, 1, 1);
         }
         return table;
     }

@@ -108,4 +108,9 @@ public final class Calculator {
         }
         return 1;
     }
+
+    public static ArrayList<Double> ergodicDistribution()
+    {
+        return null;
+    }
 }

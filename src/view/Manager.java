@@ -12,6 +12,8 @@ import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 import utilities.I18N;
 
+import java.util.ArrayList;
+
 public class Manager {
     public static Label addLabelToGridPane(GridPane table, Font font, Boolean bind, String text,
                                            HPos hPos, boolean visibility, int columnIndex, int rowIndex, int columnSpan) {
@@ -81,5 +83,24 @@ public class Manager {
         GridPane.setValignment(node, VPos.CENTER);
         GridPane.setMargin(node, new Insets(12, 25, 12, 25));
         GridPane.setColumnSpan(node, columnSpan);
+    }
+
+    /**
+     * Create a GridPane to display the resulting probability distribution.
+     */
+    public static GridPane createGridPane(int numberStates, ArrayList<Double> probabilityDistribution, String text) {
+        GridPane table = new GridPane();
+        Manager.addLabelToGridPane(table, new Font("", 20), true,
+                "label.states", HPos.CENTER, true, 0, 0, 1);
+        Manager.addLabelToGridPane(table, new Font("", 20), true,
+                text, HPos.CENTER, true, 0, 1, 1);
+        for (int i = 0; i < numberStates; i++) {
+            Manager.addLabelToGridPane(table, new Font("", 20), false,
+                    Integer.toString(i), HPos.CENTER, true, i + 1, 0, 1);
+            Manager.addLabelToGridPane(table, new Font("", 20), false,
+                    Double.toString(probabilityDistribution.get(i)), HPos.CENTER,
+                    true, i + 1, 1, 1);
+        }
+        return table;
     }
 }
