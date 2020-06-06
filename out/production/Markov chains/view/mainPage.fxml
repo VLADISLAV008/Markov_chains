@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+            xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="view.Controller">
+    <top>
+        <MenuBar>
+            <Menu fx:id="menuFile" text="%menu.file">
+                <MenuItem onAction="#loadFile" fx:id="menuLoadFile" text="%button.load"/>
+                <SeparatorMenuItem/>
+                <MenuItem onAction="#exit" fx:id="exit" text="%exit"/>
+            </Menu>
+            <Menu fx:id="menuLanguage" text="%menu.language">
+                <fx:define>
+                    <ToggleGroup fx:id="group"/>
+                </fx:define>
+                <RadioMenuItem fx:id="russian" text="%russian" onAction="#translateToRussian" selected="true"
+                               toggleGroup="$group"/>
+                <RadioMenuItem fx:id="english" text="%english" onAction="#translateToEnglish" toggleGroup="$group"/>
+            </Menu>
+            <Menu fx:id="menuHelp" text="%menu.help">
+                <MenuItem fx:id="help" onAction="#helpAction" text="%menu.help"/>
+                <MenuItem fx:id="about" onAction="#infoProgramme" text="%about"/>
+            </Menu>
+        </MenuBar>
+    </top>
+
+    <center>
+        <GridPane>
+            <FlowPane orientation="VERTICAL" style="-fx-background-color: #8c8c8c" GridPane.columnIndex="0"
+                      GridPane.rowIndex="0" prefHeight="1300">
+                <GridPane hgap="30" vgap="50" alignment="CENTER">
+                    <padding>
+                        <Insets left="2" top="40" right="10"/>
+                    </padding>
+                    <Label fx:id="fileName" text="%label.fileName" lineSpacing="2.0" textAlignment="CENTER"
+                           textFill="#e50808" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                        <GridPane.halignment>center</GridPane.halignment>
+                        <font>
+                            <Font name="System Italic" size="18.0"/>
+                        </font>
+                    </Label>
+                    <Button onAction="#deleteFile" prefHeight="22.0" prefWidth="22.0" GridPane.columnIndex="2"
+                            GridPane.rowIndex="1">
+                        <graphic>
+                            <ImageView>
+                                <Image url="/res/delete.png" requestedWidth="22" requestedHeight="22"/>
+                            </ImageView>
+                        </graphic>
+                    </Button>
+                    <Button fx:id="buttonLoad" text="%button.load" onAction="#loadFile" GridPane.columnIndex="1"
+                            GridPane.columnSpan="2" GridPane.rowIndex="2">
+                        <GridPane.halignment>center</GridPane.halignment>
+                        <font>
+                            <Font size="18.0"/>
+                        </font>
+                    </Button>
+
+                    <Button fx:id="mainMenu" text="%button.mainMenu" onAction="#createMainMenu" GridPane.columnIndex="1"
+                            GridPane.columnSpan="2" GridPane.rowIndex="3">
+                        <GridPane.halignment>center</GridPane.halignment>
+                        <font>
+                            <Font size="18.0"/>
+                        </font>
+                    </Button>
+
+                    <columnConstraints>
+                        <ColumnConstraints/>
+                        <ColumnConstraints/>
+                        <ColumnConstraints/>
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints/>
+                        <RowConstraints/>
+                        <RowConstraints/>
+                        <RowConstraints/>
+                    </rowConstraints>
+                </GridPane>
+            </FlowPane>
+
+            <GridPane fx:id="mainMenuContent" hgap="30" vgap="15" GridPane.columnIndex="1"
+                      GridPane.rowIndex="0" prefWidth="1500">
+                <padding>
+                    <Insets left="20" top="40"/>
+                </padding>
+            </GridPane>
+
+            <columnConstraints>
+                <ColumnConstraints/>
+                <ColumnConstraints/>
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints/>
+            </rowConstraints>
+        </GridPane>
+    </center>
+</BorderPane>
